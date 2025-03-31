@@ -2,7 +2,6 @@ import { useState } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import BooksList from "./components/BooksList";
-import Book from "./components/Book";
 
 function App() {
   const [title, setTitle] = useState("");
@@ -26,18 +25,20 @@ function App() {
     },
   ]);
 
-  const [books, setBooks] = useState([]);
+  const [booksList, setBooksList] = useState([]);
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setBooks([
-      ...books,
+    setBooksList([
+      ...booksList,
       {
         title: title,
         genre: bookGenres[genre - 1].value,
       },
     ]);
     console.log(`tytul: ${title}; gatunek ${bookGenres[genre - 1].value} `);
+    setTitle("");
+    setGenre("");
   };
   return (
     <div className="container-fluid">
@@ -57,6 +58,7 @@ function App() {
           <div className="form-group my-2">
             <label htmlFor="bookGenre">Tytuł książki</label>
             <select
+              value={genre}
               onChange={(e) => setGenre(e.target.value)}
               className="form-select"
               id="bookGenre"
@@ -76,11 +78,7 @@ function App() {
           </button>
         </form>
       </div>
-      <BooksList>
-        {books.map((object, key) => {
-          return <Book key={key} title={object.title} genre={object.genre} />;
-        })}
-      </BooksList>
+      <BooksList booksList={booksList} />
     </div>
   );
 }
